@@ -1,23 +1,41 @@
 #include <iostream>
-#include "hulkinizer.h"
+#include <opencv2/opencv.hpp>
 using namespace std;
 using namespace cv;
 
 int main()
 {
 
-    VideoCapture cam(0);
+    VideoCapture c1("trellis.avi");
+//    VideoCapture video("test.avi");
+
+    CascadeClassifier
+            clasif("haarcascade_frontalface_alt2.xml");
 
     while (1)
     {
-        Mat frame;
+        Mat myImage,greyimage,rgb;
+        c1 >> myImage;
+        if (myImage.empty()) break;
+        vector<Rect> detecciones_vector;
+        clasif.detectMultiScale(myImage,detecciones_vector,1.1, 3, CV_HAAR_FIND_BIGGEST_OBJECT, Size(30, 30), Size(200,200));
+        vector<Mat> canalesIm;
+        split(myImage,canalesIm);
 
-        cam >> frame;
+        for (int i=0;i<detecciones_vector.size();i++)
+        {
+            Mat face = canalesIm[1](detecciones_vector[i]);
+            face = 2*face;
+        }
 
-        cv::resize(frame,frame,Size(),0.4,0.4);
-        imshow("frame",frame);
-        waitKey(10);
+        merge(canalesIm,myImage);
 
+        for (int i=0;i<detecciones_vector.size();i++)
+            rectangle(myImage,detecciones_vector[i],CV_RGB(255,0,0));
+
+        imshow("frame",myImage);
+        char k = waitKey(10);
+        if (k=='q') break;
     }
     return 0;
 }
