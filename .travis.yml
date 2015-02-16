@@ -5,7 +5,7 @@ compiler:
 
 install:
   - sudo apt-get update
-  - sudo apt-get install libqt4-dev qt4-qmake libopencv_dev
+  - sudo apt-get install libqt4-dev qt4-qmake libopencv-dev
 
 script:
   - export OPENCV_PATH=/usr/local
