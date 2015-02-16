@@ -1,7 +1,7 @@
 #include "hulkinizer.h"
 
 HULKINIZER::HULKINIZER() :
-    clasif(new CascadeClassifier("haarcascade_frontalface_alt2.xml"))
+    clasif(new CascadeClassifier("haarcascade_mcs_upperbody.xml"))
 {
 
 }
@@ -16,9 +16,8 @@ HULKINIZER::~HULKINIZER()
 
 Mat HULKINIZER::run(Mat image, int TYPE)
 {
-    clasif->detectMultiScale(image,vector_detecciones,1.1, 3, CV_HAAR_FIND_BIGGEST_OBJECT, Size(30, 30), Size(200,200));
-    vector<Mat> canalesIm;
-    split(image,canalesIm);
+    clasif->detectMultiScale(image,vector_detecciones,1.1, 3, CV_HAAR_FIND_BIGGEST_OBJECT, Size(80, 80), Size(200,200));
+
 
     //        for (int i=0;i<detecciones_vector.size();i++)
     //        {
@@ -30,30 +29,49 @@ Mat HULKINIZER::run(Mat image, int TYPE)
 
     if (TYPE == Hulk)
     {
+        vector<Mat> canalesIm;
+        split(image,canalesIm);
         for (int i=0;i<vector_detecciones.size();i++)
         {
             Mat face = canalesIm[1](vector_detecciones[i]);
             face = 2*face;
         }
+        merge(canalesIm,image);
+
     }
     else if (TYPE == DrManhattan)
     {
+        vector<Mat> canalesIm;
+        split(image,canalesIm);
         for (int i=0;i<vector_detecciones.size();i++)
         {
             Mat face = canalesIm[0](vector_detecciones[i]);
             face = 2*face;
         }
+        merge(canalesIm,image);
+
     }
     else if (TYPE == HellBoy)
     {
+        vector<Mat> canalesIm;
+        split(image,canalesIm);
         for (int i=0;i<vector_detecciones.size();i++)
         {
             Mat face = canalesIm[2](vector_detecciones[i]);
             face = 2*face;
         }
-    }
+        merge(canalesIm,image);
 
-    merge(canalesIm,image);
+    }
+    else if (TYPE == XYZfeatures)
+    {
+        Mat hsvImage;
+        cvtColor(image,hsvImage,CV_BGR2HSV);
+        for (int i=0;i<vector_detecciones.size();i++)
+        {
+            image(vector_detecciones[i]) = 1.0*hsvImage(vector_detecciones[i]);
+        }
+    }
 
     //    for (int i=0;i<detecciones_vector.size();i++)
     //        rectangle(image,detecciones_vector[i],CV_RGB(255,0,0));
@@ -65,6 +83,7 @@ Mat HULKINIZER::run(Mat image, int TYPE)
 
 void HULKINIZER::addDetections(Mat &im)
 {
+
     for (int i=0;i<vector_detecciones.size();i++)
         rectangle(im,vector_detecciones[i],CV_RGB(255,0,0));
 }
