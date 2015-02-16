@@ -9,5 +9,5 @@ install:
 
 script:
   - export OPENCV_PATH=/usr/local
-  - qmake traviscpptest.pro
+  - qmake hulkinizer.pro
   - make
