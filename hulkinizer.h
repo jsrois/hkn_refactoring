@@ -21,7 +21,7 @@ public:
 protected:
     void addDetections(Mat& im);
 public:
-    enum {Hulk = 0, DrManhattan = 1, HellBoy = 2};
+    enum {Hulk = 0, DrManhattan = 1, HellBoy = 2, XYZfeatures = 3};
 };
 
 #endif // HULKINIZER_H

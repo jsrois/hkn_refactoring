@@ -51,7 +51,7 @@ int main()
 //        if (k=='q') break;
 
 
-        Mat result = myHulk.run(myImage,HULKINIZER::HellBoy);
+        Mat result = myHulk.run(myImage,HULKINIZER::XYZfeatures);
 
         imshow("frame",result);
         char k = waitKey(10);
